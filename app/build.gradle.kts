@@ -1,11 +1,20 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+
+    // dagger hilt
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+
+    //realm database
+    id("io.realm.kotlin")
+
 }
 
 android {
     namespace = "com.example.opensooqtask"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.opensooqtask"
@@ -15,9 +24,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
     }
 
     buildTypes {
@@ -39,14 +45,6 @@ android {
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
 }
 
 dependencies {
@@ -66,4 +64,23 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //view model
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+    // dagger hilt
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
+
+    // gson
+    implementation("com.google.code.gson:gson:2.10.1")
+
+// realm data base
+    implementation("io.realm.kotlin:library-base:2.0.0")
+}
+
+kapt {
+    correctErrorTypes = true
 }
