@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class CategoriesRepositoryImpl @Inject constructor(
+class CategoriesRepository @Inject constructor(
     private val remoteDataSource: CategoriesDataSources,
     private val realm: Realm,
     private val sharedPreferences: SharedPreferences,
@@ -25,18 +25,18 @@ class CategoriesRepositoryImpl @Inject constructor(
 
     suspend fun getCategories(): List<CategoryModelLocalResponse> {
         val filterLocalResponseWrapped = remoteDataSource.getFilterLocalResponse()
-        val categoriseModel = filterLocalResponseWrapped.categoriseModel
+        val categoriesModel = filterLocalResponseWrapped.categoriseModel
+        withContext(Dispatchers.IO) {
         filterLocalResponseWrapped.categoriseModel.forEach { categoryModel ->
             categoryModel.subCategories.forEach { subCategoryModel ->
-
                 fillSubcategoryInfo(filterLocalResponseWrapped, subCategoryModel)
             }
         }
 
-        insertCategories(categoriseModel)
+            insertCategories(categoriesModel)
+        }
 
-
-        return categoriseModel
+        return categoriesModel
     }
 
     private fun fillSubcategoryInfo(
