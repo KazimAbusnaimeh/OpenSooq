@@ -79,6 +79,15 @@ dependencies {
 
 // realm data base
     implementation("io.realm.kotlin:library-base:2.0.0")
+
+    // navigation
+    implementation("androidx.navigation:navigation-compose:2.7.3")
+
+    // System UI by compose
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.30.0")
+
+    //coil
+    implementation("io.coil-kt:coil-compose:2.2.2")
 }
 
 kapt {

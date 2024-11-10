@@ -4,12 +4,13 @@ import com.example.opensooqtask.data.repository.CategoriesRepository
 import com.example.opensooqtask.domain.model.category.CategoryModelLocalResponse
 import javax.inject.Inject
 
-class GetCategoriesUseCase @Inject constructor(
+class GetSelectedCategoriesUseCase @Inject constructor(
     private val repository: CategoriesRepository
 ) {
 
-    suspend operator fun invoke(): List<CategoryModelLocalResponse> {
-        return repository.getCategories()
+    suspend operator fun invoke(
+        id: Int
+    ): CategoryModelLocalResponse? {
+        return repository.getCategories()?.first { it.id == id }
     }
-
 }
