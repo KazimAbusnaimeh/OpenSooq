@@ -3,7 +3,6 @@ package com.example.opensooqtask.compose.screens.category
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.opensooqtask.domain.model.category.CategoryModelLocalResponse
-import com.example.opensooqtask.domain.model.category.SubCategoryLocalResponse
 import com.example.opensooqtask.domain.usecase.GetCategoriesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

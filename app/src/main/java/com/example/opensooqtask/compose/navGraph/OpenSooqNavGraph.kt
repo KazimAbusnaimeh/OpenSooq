@@ -11,6 +11,7 @@ import com.example.opensooqtask.compose.app.TopBarState
 import com.example.opensooqtask.compose.screens.Screen
 import com.example.opensooqtask.compose.screens.base.BaseScreenRoute
 import com.example.opensooqtask.compose.screens.category.CategoriesScreenRoute
+import com.example.opensooqtask.compose.screens.filter.FiltersScreenRoute
 import com.example.opensooqtask.compose.screens.subcateory.SubCategoriesScreenRoute
 
 @Composable
@@ -20,7 +21,8 @@ fun OpenSooqNavGraph(
 ) {
     val screenRoutes: List<BaseScreenRoute> = listOf(
         CategoriesScreenRoute(topBarState),
-        SubCategoriesScreenRoute(topBarState)
+        SubCategoriesScreenRoute(topBarState),
+        FiltersScreenRoute(topBarState)
     )
 
     NavHost(navController, startDestination = Screen.Category.route,

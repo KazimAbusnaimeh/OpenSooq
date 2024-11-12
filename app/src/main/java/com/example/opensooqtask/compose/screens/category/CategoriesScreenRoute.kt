@@ -3,6 +3,9 @@ package com.example.opensooqtask.compose.screens.category
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -15,7 +18,15 @@ class CategoriesScreenRoute(private val topBarState: (TopBarState) -> Unit) : Ba
     override fun addRoute(navGraphBuilder: NavGraphBuilder, navHostController: NavHostController) {
         navGraphBuilder.composable(Screen.Category.route) {
             SetSystemBarColor()
-            topBarState(TopBarState(true, PAGE_HEADER, Color.White, true))
+            topBarState(
+                TopBarState(
+                    true, PAGE_HEADER, Color.White, true,
+                    textStyle = TextStyle(
+                        fontWeight = FontWeight(700),
+                        fontSize = 24.sp
+                    )
+                )
+            )
             CategoriesScreen(navHostController)
         }
     }

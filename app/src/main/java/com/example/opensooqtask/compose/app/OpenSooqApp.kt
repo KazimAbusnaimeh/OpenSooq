@@ -19,10 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.opensooqtask.R
@@ -63,7 +62,7 @@ private fun AppContent(
 @Composable
 fun Preview() {
     AppContent(
-        remember { mutableStateOf(TopBarState(true, "Select Category", Color.White, true, true)) },
+        remember { mutableStateOf(TopBarState(true, "Select Category", Color.White, true)) },
         rememberNavController()
     )
 }
@@ -73,7 +72,7 @@ fun Preview() {
 fun TopAppBarContent(topBarState: TopBarState, navController: NavHostController) {
     if (topBarState.showAppBar) {
         TopAppBar(
-            title = { HeaderText(topBarState.title) },
+            title = { HeaderText(topBarState.title, topBarState.textStyle) },
             navigationIcon = {
                 TopBarNavigationIcon(
                     topBarState.showBackButton,
@@ -103,7 +102,7 @@ private fun TopBarNavigationIcon(showIcon: Boolean, onClick: () -> Unit) {
 }
 
 @Composable
-private fun HeaderText(text: String) {
-    Text(text, fontWeight = FontWeight(700), fontSize = 24.sp)
+private fun HeaderText(text: String, textStyle: TextStyle) {
+    Text(text, style = textStyle)
 }
 
