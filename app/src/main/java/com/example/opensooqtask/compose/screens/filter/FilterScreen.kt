@@ -49,7 +49,6 @@ fun FiltersScreen(
                 filteredSubCategories = filtersState,
                 errorState = errorState,
             )
-
         }
     }
 }
@@ -60,22 +59,16 @@ private fun FiltersContent(
     errorState: Exception?,
 ) {
     Column {
-
         when {
-
             errorState != null -> ErrorMessage(errorState.message ?: "Unknown error occurred")
-
-
             filteredSubCategories.isNullOrEmpty() -> NoCategoriesFoundMessage()
-
-            else ->
-                LazyColumn(Modifier.padding(top = 10.dp)) {
-                    items(filteredSubCategories) { filter ->
-                        if (filter.optionList.isNotEmpty()) {
-                            FilterCard(filter)
-                        }
+            else -> LazyColumn(Modifier.padding(top = 10.dp)) {
+                items(filteredSubCategories) { filter ->
+                    if (filter.optionList.isNotEmpty()) {
+                        FilterCard(filter)
                     }
                 }
+            }
         }
     }
 }
@@ -83,44 +76,27 @@ private fun FiltersContent(
 @Composable
 private fun FilterCard(filter: TopicFilterModel) {
     if (filter.componentType !== null) {
-        val isListOfStrings = filter.componentType == TopicTypeModel.LIST_STRING
-        val isListOfStringIcons = filter.componentType == TopicTypeModel.LIST_STRING_ICON
-        val isListBoolean = filter.componentType == TopicTypeModel.LIST_BOOLEAN
-
         ContainerCard {
             var showDialog by remember { mutableStateOf(false) }
             var optionsList by remember { mutableStateOf(emptyList<OptionLocalResponse>()) }
             var itemContent: @Composable (OptionLocalResponse) -> Unit = {}
             var showTabs by remember { mutableStateOf(false) }
             Column {
-                FilterCardHeader(checkNotNull(filter.name), !isListBoolean)
-                when {
+                FilterCardHeader(checkNotNull(filter.name), filter.componentType != TopicTypeModel.LIST_BOOLEAN)
 
-                    isListBoolean -> {
-                        Box(Modifier.padding(10.dp)) { AdaptiveSelectGrid(filter.optionList.map { it.name }) }
+                FilterComponentTypeHandler(
+                    filter,
+                    onOptionsReady = {
+                        optionsList = filter.optionList
+                        showTabs = true
+                        showDialog = true
+                    },
+                    onItemContentReady = {
+                        itemContent = it
                     }
+                )
 
-                    filter.componentType == TopicTypeModel.LIST_NUMERIC -> {
-                        RangeItem(filter.optionList) {
-                            optionsList = filter.optionList
-                            showTabs = true
-                            showDialog = true
-                        }
-                        itemContent = { DialogRangeItem(it) }
-                    }
-
-                    isListOfStringIcons -> {
-                        listStringAndIconsFilter(true, filter)
-                        itemContent = { DialogStringIconItem(it, true) }
-                    }
-
-                    isListOfStrings -> {
-                        listStringAndIconsFilter(false, filter)
-                        itemContent = { DialogStringIconItem(it, false) }
-                    }
-
-                }
-                FilterCardFooter(isListOfStrings || isListOfStringIcons, filter) {
+                FilterCardFooter(filter.componentType == TopicTypeModel.LIST_STRING || filter.componentType == TopicTypeModel.LIST_STRING_ICON, filter) {
                     optionsList = filter.optionList
                     showTabs = false
                     showDialog = true
@@ -138,7 +114,41 @@ private fun FilterCard(filter: TopicFilterModel) {
 }
 
 @Composable
-private fun listStringAndIconsFilter(showIcons: Boolean, filter: TopicFilterModel) {
+private fun FilterComponentTypeHandler(
+    filter: TopicFilterModel,
+    onOptionsReady: () -> Unit,
+    onItemContentReady: (itemContent: @Composable (OptionLocalResponse) -> Unit) -> Unit
+) {
+    when (filter.componentType) {
+        TopicTypeModel.LIST_BOOLEAN -> {
+            Box(Modifier.padding(10.dp)) {
+                AdaptiveSelectGrid(filter.optionList.map { it.name })
+            }
+        }
+
+        TopicTypeModel.LIST_NUMERIC -> {
+            RangeItem(filter.optionList) {
+                onOptionsReady()
+            }
+            onItemContentReady { DialogRangeItem(it) }
+        }
+
+        TopicTypeModel.LIST_STRING_ICON -> {
+            ListStringAndIconsFilter(true, filter)
+            onItemContentReady { DialogStringIconItem(it, true) }
+        }
+
+        TopicTypeModel.LIST_STRING -> {
+            ListStringAndIconsFilter(false, filter)
+            onItemContentReady { DialogStringIconItem(it, false) }
+        }
+
+        else -> {}
+    }
+}
+
+@Composable
+private fun ListStringAndIconsFilter(showIcons: Boolean, filter: TopicFilterModel) {
     LazyRow(Modifier.padding(8.dp, 12.dp)) {
         items(filter.optionList) { option ->
             CircleFilterItem(
@@ -150,7 +160,6 @@ private fun listStringAndIconsFilter(showIcons: Boolean, filter: TopicFilterMode
         }
     }
 }
-
 
 @Composable
 private fun ErrorMessage(message: String) {
