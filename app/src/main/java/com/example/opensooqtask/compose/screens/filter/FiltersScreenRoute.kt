@@ -1,8 +1,7 @@
-package com.example.opensooqtask.compose.screens.subcateory
+package com.example.opensooqtask.compose.screens.filter
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -15,28 +14,26 @@ import androidx.navigation.navArgument
 import com.example.opensooqtask.compose.app.TopBarState
 import com.example.opensooqtask.compose.screens.Screen
 import com.example.opensooqtask.compose.screens.base.BaseScreenRoute
+import com.example.opensooqtask.ui.theme.MainBlue
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-class SubCategoriesScreenRoute(private val topBarState: (TopBarState) -> Unit) : BaseScreenRoute() {
-
+class FiltersScreenRoute(private val topBarState: (TopBarState) -> Unit) : BaseScreenRoute() {
     override fun addRoute(navGraphBuilder: NavGraphBuilder, navHostController: NavHostController) {
         navGraphBuilder.composable(
-            route = Screen.SubCategory(SubCategoriesScreenArgs.ID_ARG).route,
-            arguments = listOf(
-                navArgument(SubCategoriesScreenArgs.ID_ARG) { type = NavType.StringType }
-            )
+            route = Screen.Filter(FiltersScreenArgs.ID_ARG).route,
+            arguments = listOf(navArgument(FiltersScreenArgs.ID_ARG) { type = NavType.StringType }),
         ) {
             SetSystemBarColor()
             topBarState(
                 TopBarState(
-                    true, PAGE_HEADER, Color.White, true,
+                    true, PAGE_HEADER, MainBlue, true,
                     textStyle = TextStyle(
-                        fontWeight = FontWeight(700),
+                        fontWeight = FontWeight(500),
                         fontSize = 24.sp
                     )
                 )
             )
-            SubCategoriesScreen(navHostController)
+            FiltersScreen()
         }
     }
 
@@ -45,21 +42,21 @@ class SubCategoriesScreenRoute(private val topBarState: (TopBarState) -> Unit) :
         val systemUiController = rememberSystemUiController()
         SideEffect {
             systemUiController.setStatusBarColor(
-                color = Color.White,
-                darkIcons = true
+                color = MainBlue,
+                darkIcons = false
             )
         }
     }
 
     companion object {
-        private const val PAGE_HEADER = "Select Subcategory"
-        fun NavHostController.navigateToSubCategories(id: String) {
-            navigate(Screen.SubCategory(id).route)
+        private const val PAGE_HEADER = "Filters"
+        fun NavHostController.navigateFiltersScreen(id: String) {
+            navigate(Screen.Filter(id).route)
         }
     }
 }
 
-class SubCategoriesScreenArgs(savedStateHandle: SavedStateHandle) {
+class FiltersScreenArgs(savedStateHandle: SavedStateHandle) {
     val id: String = checkNotNull(savedStateHandle[ID_ARG])
 
     companion object {

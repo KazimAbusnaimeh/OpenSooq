@@ -27,11 +27,28 @@ android {
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField(
+                "String",
+                "IMAGE_BASE_URL",
+                "\"" + rootProject.extra["app.image.base.url"] + "\""
+            )
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
+            )
+            buildConfigField(
+                "String",
+                "IMAGE_BASE_URL",
+                "\"" + rootProject.extra["app.image.base.url"] + "\""
             )
         }
     }
@@ -44,6 +61,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
@@ -88,6 +106,10 @@ dependencies {
 
     //coil
     implementation("io.coil-kt:coil-compose:2.2.2")
+
+    // flowLayout
+    implementation("com.google.accompanist:accompanist-flowlayout:0.30.1")
+
 }
 
 kapt {

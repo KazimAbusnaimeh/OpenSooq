@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -49,7 +50,7 @@ fun ItemContent(title: String, icon: String, onClick: () -> Unit) {
             Spacer(Modifier.width(16.dp))
             ItemTitle(title)
         }
-        HorizontalDivider(thickness = 2.dp, color = Color.LightGray)
+        HorizontalDivider(thickness = 2.dp, color = LightGray)
     }
 }
 
